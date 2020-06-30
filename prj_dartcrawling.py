@@ -27,4 +27,5 @@ data.to_csv("연결 재무상태표.csv",encoding="euc-kr")
 """
 print(type(pocket))
 print(pocket)
+print(pocket)
 
