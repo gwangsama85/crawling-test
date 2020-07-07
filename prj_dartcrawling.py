@@ -28,18 +28,24 @@ def download_excel(url1,period,company) :
             data.to_csv(company+period + sheet + ".csv", encoding="euc-kr")
 print(url_1908)
 
-def download_excel_2(rcp_no, dcm_no, period,company) :
+def download_excel_2(period, rcp_no, dcm_no,company) :
     url1 = "http://dart.fss.or.kr/pdf/download/excel.do?rcp_no=" + rcp_no + "&dcm_no=" + dcm_no + "&lang=ko"
     resp = requests.get(url1, headers={"user-agent": u_a})
     for sheet in ["기본정보", "연결 재무상태표", "연결 손익계산서", "연결 포괄손익계산서"]:
         table = BytesIO(resp.content)
         data = pd.read_excel(table, sheet_name=sheet, skiprows=5)
-        data.to_csv(company+period + sheet + ".csv", encoding="euc-kr")
+        data.to_csv(str(period)+company + sheet + ".csv", encoding="euc-kr")
 
 download_excel(url_1908,"1908_","삼성전자")
 download_excel(url_2005,"2005_","삼성전자")
-
 download_excel_2(rcp_no,dcm_no,"1908_","삼성전자")
+
+df=pd.read_csv("pocket.csv")
+print(df)
+
+for period, rdp_no, dcm_no in zip(df['period'].values, df['rcp_no'].values, df['dcm_no'].values) :
+    print(period, rcp_no, dcm_no)
+    download_excel_2(period,rcp_no,dcm_no,"삼성전자")
 
 
 """data=pd.read_excel(table, s
